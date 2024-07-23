@@ -10,7 +10,7 @@ on:
 
 jobs:
   main_merge_eligibility:
-    if: ${{ github.base_ref == 'main' }}
+    if: ${{ github.event_name == 'workflow_run' || (github.base_ref == 'main' && github.event_name == 'pull_request' )}}
     name: Disable Merging to main if the last tagging job has failed
     runs-on: ubuntu-latest
     steps:
