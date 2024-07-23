@@ -9,6 +9,14 @@ on:
       - completed
 
 jobs:
+  step1:
+    name: step1
+    runs-on: ubuntu-latest
+    steps:
+      - name: "s1"
+        run: |
+          echo "started again"
+
   main_merge_eligibility:
     if: ${{ github.event_name == 'workflow_run' || (github.base_ref == 'main' && github.event_name == 'pull_request' )}}
     name: Disable Merging to main if the last tagging job has failed
@@ -23,8 +31,7 @@ jobs:
       - name: Get the last run conclusion (on workflow completion)
         if: ${{ github.event_name == 'workflow_run' }}
         run: |
-          if [ "${{ github.event.workflow_run.conclusion }}" == "success" ]; then
-            echo "success"
-          else
-            eixt 1
+          if [ "${{ github.event.workflow_run.conclusion }}" != "success" ]; then
+
+            exist 1
           fi
