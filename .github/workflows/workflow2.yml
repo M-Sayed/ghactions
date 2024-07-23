@@ -1,0 +1,30 @@
+name: Workflow2
+
+on:
+  pull_request:
+  workflow_run:
+    workflows: ["Workflow1"]
+    branches: [main]
+    types:
+      - completed
+
+jobs:
+  main_merge_eligibility:
+    if: ${{ github.base_ref == 'main' }}
+    name: Disable Merging to main if the last tagging job has failed
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Get the last run conclusion (on pull_request)
+        if: ${{ github.event_name != 'workflow_run' }}
+        run: |
+          echo "Running on pull_request event script"
+      - name: Get the last run conclusion (on workflow completion)
+        if: ${{ github.event_name == 'workflow_run' }}
+        run: |
+          if [ "${{ github.event.workflow_run.conclusion }}" == "success" ]; then
+            echo "success"
+          else
+            eixt 1
+          fi

@@ -1,0 +1,20 @@
+name: Workflow1
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  fail_if_red:
+    runs-on: ubuntu-latest
+    steps:
+      - name: To Fail
+        if: contains(${{ github.event.head_commit.message }}, 'nok')
+        run: |
+          echo "This is going to fail"
+          exit 1
+      - name: Not To Fail
+        if: not contains(${{ github.event.head_commit.message }}, 'ok')
+        run: |
+          echo "This is not going to fail"
