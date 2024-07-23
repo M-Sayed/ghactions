@@ -15,6 +15,6 @@ jobs:
           echo "This is going to fail"
           exit 1
       - name: Not To Fail
-        if: not contains(${{ github.event.head_commit.message }}, 'ok')
+        if: contains(${{ github.event.head_commit.message }}, 'ok')
         run: |
           echo "This is not going to fail"
